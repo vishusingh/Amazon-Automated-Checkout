@@ -21,6 +21,7 @@ class BBYbot():
     self.cardsecurity=config.get('CARD_INFO','CARDSECURITY')
     self.expm=config.get('CARD_INFO','EXPM')
     self.expy=config.get('CARD_INFO','EXPY')
+    self.cvv=config.get('CARD_INFO','CVV')
   
 
     self.driver.get(self.url)
@@ -34,7 +35,7 @@ class BBYbot():
     password_input = self.driver.find_element_by_xpath('//*[@id="ap_password"]')
     password_input.send_keys(self.password)
     password_input.submit()
-    time.sleep(3)
+    time.sleep(2)
 
     try:
       employee=self.driver.find_element_by_xpath('/html/body/div[1]/div/section/main/div[1]/div/div/div/div/form/div[1]/div/input')
@@ -47,7 +48,7 @@ class BBYbot():
     self.driver.get('https://www.amazon.in/gp/product/B08FV5GC28/ref=s9_acss_bw_cg_button_2a1_w?pf_rd_m=A1K21FY43GMZF8&pf_rd_s=merchandised-search-1&pf_rd_r=X3DVWGP1TW3DA5SVRY7M&pf_rd_t=101&pf_rd_p=01e9c541-42d0-4ab7-ba81-f69fbb14851b&pf_rd_i=21725163031')
 
   def in_stock(self):
-    time.sleep(5)
+    time.sleep(2)
     try:
       item = self.driver.find_element_by_id('submit.add-to-cart-announce')
       print("In stock!")
@@ -55,16 +56,16 @@ class BBYbot():
 
     except:
       self.driver.refresh()
-      time.sleep(4)
+      time.sleep(3)
       print("Item is out of stock - retrying...")
       return False
 
   def add_toCart(self, incart):
     try:
-      time.sleep(3)
+      time.sleep(2)
       item =self.driver.find_element_by_id('add-to-cart-button')
       item.click()
-      time.sleep(5)							
+      time.sleep(2)				
       go_to_cart_button= self.driver.find_element_by_id("nav-cart")
       
       go_to_cart_button.click()
@@ -75,28 +76,27 @@ class BBYbot():
       print("Couldnt add to cart trying again")
       incart=False
   def checkout(self):
-    time.sleep(3)
+    time.sleep(2)
     #starts checkout
     self.driver.find_element_by_id('sc-buy-box-ptc-button').click()
     #selects address
     time.sleep(2)
-    self.driver.find_element_by_xpath('/html/body/div[5]/div[2]/div/div[1]/form[1]/div/div[1]/div[2]/span/a').click()
+    self.driver.find_element_by_css_selector('#address-book-entry-0 .ship-to-this-address').click()
     #continues to payment
     time.sleep(2)
     self.driver.find_element_by_xpath('/html/body/div[5]/div[1]/div/div[2]/div/div[1]/form/div[1]/div[2]/div/span[1]/span/input').click()
-    time.sleep(4)
-    # to the final step
+    time.sleep(2)
+    # Entering cvv and proceeding to the final step
+    cvvInput = self.driver.find_element_by_css_selector('.pmts-selected .a-input-text')
+    cvvInput.send_keys(self.cvv)
+    time.sleep(.5)
     self.driver.find_element_by_xpath('/html/body/div[5]/div[1]/div[2]/div[3]/div/div[2]/div[1]/form/div[2]/div/div/div/span/span/input').click()
-    time.sleep(5)
+    time.sleep(10)
 
   def closeEmailprompt(self):
     self.driver.find_element_by_class_name("c-modal-close-icon").click()
   def close(self):
     self.driver.close()
-def getinput():
-  sku_num=skunumber.get()
-  print(sku_num)
-  return sku_num
 
 print("Starting Bot")
 searchtag=''
@@ -104,13 +104,13 @@ config_file= ConfigParser()
 config_file.read("config.ini")
 bot = BBYbot(config_file)
 try:
-  time.sleep(2)
+  time.sleep(1)
   bot.Login()
 except:
   bot.closeEmailprompt()
   time.sleep(3)
   bot.Login()
-time.sleep(4)
+time.sleep(1)
 bot.navtoProd()
 instock= bot.in_stock()
 incart=False
