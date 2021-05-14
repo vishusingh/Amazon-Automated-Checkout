@@ -1,5 +1,14 @@
- BestBuy-Automated-Checkout
-A bot to constantly run and purchase item on BestBuy.com
+`Forked from Konyanj0278's checkout tool, repurposed to work on amazon(IN) for ps5`
+
+## Amazon-Automated-Checkout
+---
+A bot repurposed to constantly run and purchase an item on Amazon.in, built to help friends and family get their console of choice (configured for PS5).
+--
+
+  <br/>
+
+### From the original creator
+-------------------------
 
 Update 1/21
 
@@ -26,10 +35,6 @@ How to use:
 4) Open the config file with a text editor and fill in the parrameters with your information, if you are an employee of BestBuy there    is a field for your employee number.
 5) Edit the code and change the field of bot.searctag() to contain the sku that you want, do note that this field takes a string and    not an integer. 
 6) Run bot and Enjoy
-
-Picture of code working:
-
-![BestBuy Bot Succsess](https://user-images.githubusercontent.com/55165705/98168055-df014300-1e9e-11eb-9eeb-f8911be903d2.JPG)
 
 
 Link to latest version of ChromeWebdriver:
