@@ -26,11 +26,7 @@ class BBYbot():
     self.driver.get(self.url)
 
   def Login(self):
-    # time.sleep(5)
-    # self.driver.find_element_by_class_name("nav-progressive-attribute").click()
     self.driver.find_element_by_css_selector("a#nav-link-accountList").click()
-    time.sleep(.5)
-    # self.driver.find_element_by_class_name("btn-secondary").click()
     time.sleep(2)
     username_input=self.driver.find_element_by_xpath('//*[@id="ap_email"]')
     username_input.send_keys(self.username)
@@ -48,18 +44,12 @@ class BBYbot():
       return
 
   def navtoProd(self):
-    # self.driver.get('https://www.amazon.in/gp/product/B07K6RYVHQ/ref=ox_sc_act_title_1?smid=A1G3PUPKCIO8DY&psc=1')
     self.driver.get('https://www.amazon.in/gp/product/B08FV5GC28/ref=s9_acss_bw_cg_button_2a1_w?pf_rd_m=A1K21FY43GMZF8&pf_rd_s=merchandised-search-1&pf_rd_r=X3DVWGP1TW3DA5SVRY7M&pf_rd_t=101&pf_rd_p=01e9c541-42d0-4ab7-ba81-f69fbb14851b&pf_rd_i=21725163031')
-    # searchbar=self.driver.find_element_by_id('twotabsearchtextbox')
-    # searchbar.send_keys(search_tag)
-    # searchbar.submit()
 
   def in_stock(self):
     time.sleep(5)
     try:
       item = self.driver.find_element_by_id('submit.add-to-cart-announce')
-      #webdriver.ActionChains(self.driver).click_and_hold(self.driver.find_elements_by_class_name('btn btn-primary btn-lg btn-block btn-leading-ficon add-to-cart-button')).perform()
-      #webdriver.ActionChains(self.driver).release().preform()
       print("In stock!")
       return True
 
@@ -86,23 +76,18 @@ class BBYbot():
       incart=False
   def checkout(self):
     time.sleep(3)
-    #selects shipping
-    self.driver.find_element_by_xpath('/html/body/div[1]/main/div/div[2]/div[1]/div/div/span/div/div[1]/div[1]/section[1]/div[4]/ul/li/section/div[2]/div[2]/form/div[2]/fieldset/div[2]/div[1]/div/div/div/input').click()
-    #presses checkout
-    self.driver.find_element_by_xpath('/html/body/div[1]/main/div/div[2]/div[1]/div/div/span/div/div[1]/div[1]/section[2]/div/div/div[3]/div/div[1]/button').click()
+    #starts checkout
+    self.driver.find_element_by_id('sc-buy-box-ptc-button').click()
+    #selects address
+    time.sleep(2)
+    self.driver.find_element_by_xpath('/html/body/div[5]/div[2]/div/div[1]/form[1]/div/div[1]/div[2]/span/a').click()
     #continues to payment
     time.sleep(2)
-    self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[2]/form/section/div/div[2]/div/div/button').click()
+    self.driver.find_element_by_xpath('/html/body/div[5]/div[1]/div/div[2]/div/div[1]/form/div[1]/div[2]/div/span[1]/span/input').click()
     time.sleep(4)
-    paymentinfo=self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[1]/div/section/div[1]/div/input')
-    paymentinfo.send_keys(self.card)
-    selectmm = Select(self.driver.find_element_by_name('expiration-month'))
-    selectmm.select_by_visible_text(self.expm)
-    selectyy = Select(self.driver.find_element_by_name('expiration-year'))
-    selectyy.select_by_visible_text(self.expy)
-    securitycode=self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[1]/div/section/div[2]/div[2]/div/div[2]/div/input')
-    securitycode.send_keys(self.cardsecurity)
-    self.driver.find_element_by_xpath('/html/body/div[3]/div[2]/div/div/div[1]/div[1]/main/div[2]/div[3]/div/section/div[4]/button').click()
+    # to the final step
+    self.driver.find_element_by_xpath('/html/body/div[5]/div[1]/div[2]/div[3]/div/div[2]/div[1]/form/div[2]/div/div/div/span/span/input').click()
+    time.sleep(5)
 
   def closeEmailprompt(self):
     self.driver.find_element_by_class_name("c-modal-close-icon").click()
@@ -119,7 +104,7 @@ config_file= ConfigParser()
 config_file.read("config.ini")
 bot = BBYbot(config_file)
 try:
-  time.sleep(5)
+  time.sleep(2)
   bot.Login()
 except:
   bot.closeEmailprompt()
@@ -138,7 +123,7 @@ if (instock==True) :
     incart=bot.add_toCart(incart)
     print("In cart!")
 time.sleep(1)
-#bot.checkout()
+bot.checkout()
 
 print("compiled")
 bot.close()
