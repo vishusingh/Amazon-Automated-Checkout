@@ -47,7 +47,8 @@ class BBYbot():
     except:
       return
 
-  def searchtag(self, search_tag):
+  def navtoProd(self):
+    # self.driver.get('https://www.amazon.in/gp/product/B07K6RYVHQ/ref=ox_sc_act_title_1?smid=A1G3PUPKCIO8DY&psc=1')
     self.driver.get('https://www.amazon.in/gp/product/B08FV5GC28/ref=s9_acss_bw_cg_button_2a1_w?pf_rd_m=A1K21FY43GMZF8&pf_rd_s=merchandised-search-1&pf_rd_r=X3DVWGP1TW3DA5SVRY7M&pf_rd_t=101&pf_rd_p=01e9c541-42d0-4ab7-ba81-f69fbb14851b&pf_rd_i=21725163031')
     # searchbar=self.driver.find_element_by_id('twotabsearchtextbox')
     # searchbar.send_keys(search_tag)
@@ -56,22 +57,22 @@ class BBYbot():
   def in_stock(self):
     time.sleep(5)
     try:
-      
       item = self.driver.find_element_by_id('submit.add-to-cart-announce')
       #webdriver.ActionChains(self.driver).click_and_hold(self.driver.find_elements_by_class_name('btn btn-primary btn-lg btn-block btn-leading-ficon add-to-cart-button')).perform()
       #webdriver.ActionChains(self.driver).release().preform()
       print("In stock!")
       return True
-      
 
     except:
-      print("Item is out of stock")
+      self.driver.refresh()
+      time.sleep(4)
+      print("Item is out of stock - retrying...")
       return False
 
   def add_toCart(self, incart):
     try:
       time.sleep(3)
-      item =self.driver.find_element_by_id('submit.add-to-cart-announce')
+      item =self.driver.find_element_by_id('add-to-cart-button')
       item.click()
       time.sleep(5)							
       go_to_cart_button= self.driver.find_element_by_id("nav-cart")
@@ -125,10 +126,14 @@ except:
   time.sleep(3)
   bot.Login()
 time.sleep(4)
-bot.searchtag("6429440")
+bot.navtoProd()
 instock= bot.in_stock()
 incart=False
-if (instock==True):
+# driver = webdriver.Chrome('./chromedriver')
+while(instock!=True) :
+  instock = bot.in_stock()
+
+if (instock==True) :
   while(incart != True):
     incart=bot.add_toCart(incart)
     print("In cart!")
